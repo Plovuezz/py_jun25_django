@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
@@ -18,7 +19,8 @@ from messenger.models import Message
 #         context
 #     )
 
-class HomeView(generic.TemplateView):
+
+class HomeView(LoginRequiredMixin, generic.TemplateView):
     template_name = "messenger/home.html"
 
     def get_context_data(self, **kwargs):
@@ -26,7 +28,14 @@ class HomeView(generic.TemplateView):
 
         num_messages = Message.objects.count()
         context["num_messages"] = num_messages
-        context["last_viewed_message"] = self.request.session.get("last_viewed_message")
+
+        if last_viewed_message_id := self.request.session.get("last_viewed_message_id"):
+            try:
+                context["last_viewed_message"] = Message.objects.get(
+                    pk=last_viewed_message_id
+                )
+            except Message.DoesNotExist:
+                del self.request.session["last_viewed_message_id"]
 
         return context
 
@@ -45,22 +54,29 @@ class MessageListView(generic.ListView):
     model = Message
 
 
-def message_detail_view(
-        request: HttpRequest,
-        pk: int
-) -> HttpResponse:
-    message = get_object_or_404(Message, pk=pk)
-
-    context = {
-        "message": message
-    }
-
-    return render(
-        request,
-        "messenger/message_detail.html",
-        context
-    )
+# def message_detail_view(
+#         request: HttpRequest,
+#         pk: int
+# ) -> HttpResponse:
+#     message = get_object_or_404(Message, pk=pk)
+#
+#     context = {
+#         "message": message
+#     }
+#
+#     return render(
+#         request,
+#         "messenger/message_detail.html",
+#         context
+#     )
 
 
 class MessageDetailView(generic.DetailView):
     model = Message
+
+    def get_object(self, *args, **kwargs):
+        message = super().get_object(*args, **kwargs)
+
+        self.request.session["last_viewed_message_id"] = message.id
+
+        return message
