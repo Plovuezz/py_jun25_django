@@ -1,10 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <p>Hello, world!</p>
-  <a href="{% url 'accounts:login' %}">Login link</a>
-  <a href="{% url 'messenger:home' %}">Link to Home</a>
-  <a href="{% url 'messenger:message-list' %}">Link to Message List</a>
+  <h1>Django messenger</h1>
+  <br>
   <p>Num messages: {{ num_messages }}</p>
   {% if last_viewed_message %}
   <p>Last viewed message:

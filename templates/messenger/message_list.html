@@ -2,14 +2,15 @@
 
 {% block content %}
   <h1>Message List</h1>
+  <br>
   {% if message_list %}
-    <ul>
+    <div class="list-group">
       {% for message in message_list %}
-        <li>
-          <a href="{{ message.get_absolute_url }}">{{ message.id }}</a>{{ message.text }}
-        </li>
+      <a href="{{ message.get_absolute_url }}" class="list-group-item list-group-item-action">
+        {{ message.text|truncatechars:50 }}
+      </a>
       {% endfor %}
-    </ul>
+    </div>
   {% else %}
     <p>There are no messages!</p>
   {% endif %}
