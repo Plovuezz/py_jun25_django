@@ -1,6 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
+from django.urls import reverse
 from django.views import generic
 
 from messenger.models import Message
@@ -80,3 +81,16 @@ class MessageDetailView(generic.DetailView):
         self.request.session["last_viewed_message_id"] = message.id
 
         return message
+
+
+def message_create_view(request):
+    if request.method == "GET":
+        return render(request, "messenger/message_form.html")
+
+    if request.method == "POST":
+        text = request.POST["text"]
+        Message.objects.create(text=text, user=request.user)
+
+        return HttpResponseRedirect(
+            reverse("messenger:message-list")
+        )

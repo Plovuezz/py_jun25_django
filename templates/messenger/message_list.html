@@ -14,4 +14,6 @@
   {% else %}
     <p>There are no messages!</p>
   {% endif %}
+  <br>
+  <a href="{% url 'messenger:message-create' %}" class="btn btn-primary">Create message</a>
 {% endblock %}
