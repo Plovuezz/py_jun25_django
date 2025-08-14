@@ -6,7 +6,7 @@
   <p>Num messages: {{ num_messages }}</p>
   {% if last_viewed_message %}
   <p>Last viewed message:
-    <a href="{{ last_viewed_message.get_absolute_url }}">
+    <a class="btn btn-link" href="{{ last_viewed_message.get_absolute_url }}">
       Message #{{ last_viewed_message.id }}
     </a>
   </p>
