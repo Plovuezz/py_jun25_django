@@ -1,9 +1,11 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views import generic
 
+from messenger.forms import MessageForm
 from messenger.models import Message
 
 
@@ -83,14 +85,34 @@ class MessageDetailView(generic.DetailView):
         return message
 
 
-def message_create_view(request):
-    if request.method == "GET":
-        return render(request, "messenger/message_form.html")
+# @login_required
+# def message_create_view(request):
+#     context = {}
+#     form = MessageForm(request.POST or None)
+#
+#     if form.is_valid():
+#         message = form.save(commit=False)
+#         message.user = request.user
+#         message.save()
+#
+#         return HttpResponseRedirect(
+#             reverse("messenger:message-list")
+#         )
+#     context["form"] = form
+#
+#     return render(
+#         request,
+#         "messenger/message_form.html",
+#         context=context
+#     )
 
-    if request.method == "POST":
-        text = request.POST["text"]
-        Message.objects.create(text=text, user=request.user)
 
-        return HttpResponseRedirect(
-            reverse("messenger:message-list")
-        )
+class MessageCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Message
+    form_class = MessageForm
+    success_url = reverse_lazy("messenger:message-list")
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+
+        return super().form_valid(form)
