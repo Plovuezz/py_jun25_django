@@ -2,6 +2,10 @@ import sys
 import os
 from pathlib import Path
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = "django-insecure-9!90p$96t%-bk0=j2z04e2gdmg%*a-12h%$f3a9#s-t681uo8i"
@@ -111,3 +115,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "accounts.User"
 
 LOGIN_REDIRECT_URL = "messenger:home"
+
+# email
+EMAIL_USE_TLS = True
+EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "your-email@gmail.com")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "password")
+EMAIL_PORT = os.getenv("EMAIL_PORT", 587)
