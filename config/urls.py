@@ -9,7 +9,5 @@ urlpatterns = [
     path("accounts/", include("accounts.urls")),
 ]
 
-if not settings.TESTING:
-    urlpatterns = [
-        *urlpatterns,
-    ] + debug_toolbar_urls()
+if settings.DEBUG:
+    urlpatterns += debug_toolbar_urls()
