@@ -12,7 +12,7 @@ SECRET_KEY = "django-insecure-9!90p$96t%-bk0=j2z04e2gdmg%*a-12h%$f3a9#s-t681uo8i
 
 ALLOWED_HOSTS = ["*"]
 
-DEBUG = False
+DEBUG = True
 
 INTERNAL_IPS = [
     "127.0.0.1",
@@ -97,7 +97,6 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = "static/"
-
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
