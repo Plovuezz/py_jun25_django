@@ -1,5 +1,6 @@
 from debug_toolbar.toolbar import debug_toolbar_urls
 from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
@@ -8,6 +9,7 @@ urlpatterns = [
     path("", include("messenger.urls")),
     path("accounts/", include("accounts.urls")),
 ]
+
 
 if settings.DEBUG:
     urlpatterns += debug_toolbar_urls()
