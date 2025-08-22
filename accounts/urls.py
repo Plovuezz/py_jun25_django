@@ -1,6 +1,6 @@
 from django.urls import path, include
 
-from accounts.views import SignUpView, ActivateAccountView
+from accounts.views import SignUpView, ActivateAccountView, UserListView, UserListPartialView
 
 app_name = "accounts"
 
@@ -12,4 +12,6 @@ urlpatterns = [
         name="activate",
     ),
     path("", include("django.contrib.auth.urls")),
+    path("", UserListView.as_view(), name="user-list"),
+    path("patial/", UserListPartialView.as_view(), name="user-list-partial"),
 ]

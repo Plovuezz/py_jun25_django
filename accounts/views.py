@@ -6,6 +6,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from django.db import transaction
+from django.db.models import Q
 from django.http import HttpRequest
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
@@ -84,3 +85,33 @@ class ActivateAccountView(View):
                 return redirect("accounts:login")
 
         return render(request, "registration/activation_invalid.html")
+
+
+class UserListView(generic.ListView):
+    model = User
+    template_name = "accounts/user_list.html"
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.select_related("profile")
+
+        return queryset
+
+
+class UserListPartialView(generic.ListView):
+    model = User
+    template_name = "accounts/partials/user_list_partial.html"
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.select_related("profile")
+
+        if search_query := self.request.GET.get("search", ""):
+            queryset = queryset.filter(
+                Q(username__icontains=search_query)
+                | Q(email__icontains=search_query)
+                | Q(first_name__icontains=search_query)
+                | Q(last_name__icontains=search_query)
+            )
+
+        return queryset

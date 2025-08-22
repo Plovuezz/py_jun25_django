@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="container">
+    <h1>
+      Accounts List
+      <span class="htmx-indicator">
+        Searching...
+      </span>
+    </h1>
+    <input class="form-control" type="search"
+       name="search" placeholder="Begin Typing To Search Users..."
+       hx-get="{% url 'accounts:user-list-partial' %}"
+       hx-trigger="keyup changed delay:500ms"
+       hx-target="#search-results"
+       hx-indicator=".htmx-indicator">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Avatar</th>
+          <th>Email</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Is Active</th>
+        </tr>
+      </thead>
+      <tbody id="search-results">
+        {% include "accounts/partials/user_list_partial.html" %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
