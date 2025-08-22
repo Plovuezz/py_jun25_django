@@ -13,7 +13,6 @@ class ProfileInline(admin.TabularInline):
         return False
 
 
-
 @admin.register(User)
 class UserAdmin(UserAdmin):
     inlines = [ProfileInline]
