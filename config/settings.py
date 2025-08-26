@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "accounts",
     "messenger",
+    "log"
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -45,6 +46,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "base.middlewares.LoggingMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -70,6 +72,10 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
+    },
+    "log": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "log.sqlite3",
     }
 }
 
